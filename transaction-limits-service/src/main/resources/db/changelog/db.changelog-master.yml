@@ -1,0 +1,3 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-master.yml
+

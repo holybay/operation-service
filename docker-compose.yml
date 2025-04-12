@@ -1,0 +1,21 @@
+name: finance-app-monolith
+
+services:
+  transaction-service:
+    build: transaction-limits-service
+    image: transaction-service:1.0.0
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - finance-network
+  finance_db:
+    build: postgresql
+    image: postgresql-finance:1.0.0
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - finance-network
+
+networks:
+  finance-network:
