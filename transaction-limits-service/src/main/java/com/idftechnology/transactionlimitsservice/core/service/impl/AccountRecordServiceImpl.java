@@ -1,7 +1,8 @@
-package com.idftechnology.transactionlimitsservice.core.service.api;
+package com.idftechnology.transactionlimitsservice.core.service.impl;
 
 import com.idftechnology.transactionlimitsservice.core.repository.api.AccountRecordRepository;
 import com.idftechnology.transactionlimitsservice.core.repository.entity.AccountRecord;
+import com.idftechnology.transactionlimitsservice.core.service.api.AccountRecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
