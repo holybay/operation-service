@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 
 @Documented
 @Constraint(validatedBy = ExpenseCategoryValidator.class)
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @NotBlank(message = "Expense category type can't be blank")
 public @interface ExpenseCategoryValid {
