@@ -20,3 +20,7 @@ databaseChangeLog:
   - include:
       file: changeset/db.changelog-20250413_005-add-base-expense-categories.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250414_006-account-records.sql
+      relativeToChangelogFile: true
