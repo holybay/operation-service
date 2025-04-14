@@ -22,7 +22,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("account/{accountId}/limits")
+@RequestMapping("/account/{accountId}/limits")
 public class LimitController {
 
     private final LimitFacade limitFacade;
