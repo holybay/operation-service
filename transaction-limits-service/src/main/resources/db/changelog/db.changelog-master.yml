@@ -1,3 +1,7 @@
 databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yml
 
+  - include:
+      file: changeset/db.changelog-20250413_001-create-expense_categories-table.sql
+      relativeToChangelogFile: true
+
