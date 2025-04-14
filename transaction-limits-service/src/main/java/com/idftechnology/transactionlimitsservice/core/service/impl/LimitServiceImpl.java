@@ -8,6 +8,7 @@ import com.idftechnology.transactionlimitsservice.core.repository.entity.Limit;
 import com.idftechnology.transactionlimitsservice.core.service.api.LimitService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,5 +54,14 @@ public class LimitServiceImpl implements LimitService {
         Limit entity = mapper.toEntity(dto, accountId);
         Limit limit = repository.saveAndFlush(entity);
         return mapper.toDto(limit);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<LimitOutDto> getAll(Long accountId, Pageable pageable) {
+        return repository.getActiveLimits(accountId, pageable)
+                         .stream()
+                         .map(mapper::toDto)
+                         .toList();
     }
 }
