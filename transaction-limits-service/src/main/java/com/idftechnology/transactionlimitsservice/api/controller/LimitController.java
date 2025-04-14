@@ -2,7 +2,7 @@ package com.idftechnology.transactionlimitsservice.api.controller;
 
 import com.idftechnology.transactionlimitsservice.api.dto.LimitCreateDto;
 import com.idftechnology.transactionlimitsservice.api.dto.LimitOutDto;
-import com.idftechnology.transactionlimitsservice.core.service.api.LimitService;
+import com.idftechnology.transactionlimitsservice.core.service.api.LimitFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,15 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/account/{accountId}/limits")
+@RequestMapping("account/{accountId}/limits")
 public class LimitController {
 
-    private final LimitService limitService;
+    private final LimitFacade limitFacade;
 
     @PostMapping
     public ResponseEntity<LimitOutDto> add(@PathVariable Long accountId,
                                            @RequestBody @Valid LimitCreateDto createDto) {
-        LimitOutDto created = limitService.add(accountId, createDto);
+        LimitOutDto created = limitFacade.add(accountId, createDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 }
