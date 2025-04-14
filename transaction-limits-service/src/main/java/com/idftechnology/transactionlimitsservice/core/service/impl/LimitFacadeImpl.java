@@ -6,7 +6,11 @@ import com.idftechnology.transactionlimitsservice.core.service.api.LimitFacade;
 import com.idftechnology.transactionlimitsservice.core.service.api.LimitInitializeService;
 import com.idftechnology.transactionlimitsservice.core.service.api.LimitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.ZoneOffset;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,4 +25,9 @@ public class LimitFacadeImpl implements LimitFacade {
         return limitService.add(accountId, dto);
     }
 
+    @Override
+    public List<LimitOutDto> getAll(Long accountId, Pageable pageable, ZoneOffset zoneOffset) {
+        limitInitService.checkAndInit(accountId, zoneOffset);
+        return limitService.getAll(accountId, pageable);
+    }
 }
