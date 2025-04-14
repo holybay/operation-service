@@ -8,3 +8,7 @@ databaseChangeLog:
   - include:
       file: changeset/db.changelog-20250413_002-create-limits-table.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250413_003-create-transactions-table.sql
+      relativeToChangelogFile: true
