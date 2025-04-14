@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 @NotBlank(message = "Expense category type can't be blank")
 public @interface ExpenseCategoryValid {
 
-    String message() default "Invalid currency code";
+    String message() default "Invalid expense category";
 
     Class<?>[] groups() default {};
 
