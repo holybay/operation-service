@@ -32,3 +32,10 @@ spring:
 logging:
   level:
     root: 'info'
+
+#Custom properties
+app:
+  property:
+    limitsByDefault:
+      product: 1000
+      service: 1000
