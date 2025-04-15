@@ -11,16 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.ZoneOffset;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class LimitCreateDto {
-
-    @NotNull
-    private ZoneOffset zone;
 
     @Positive
     @NotNull

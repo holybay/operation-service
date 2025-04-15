@@ -46,16 +46,16 @@ public class LimitServiceImpl implements LimitService {
 
     @Transactional
     @Override
-    public LimitOutDto add(Long accountId, LimitCreateDto dto) {
+    public LimitOutDto add(Long accountId, LimitCreateDto dto, @NotBlank ZoneOffset zoneOffset) {
         Optional<Limit> optLimit = repository.findLimitByCategory(accountId, dto.getExpenseCategory());
 
         Limit oldLimit = optLimit.orElseThrow(() -> new LimitNotFoundException(
                 String.format("No found limit {%s} for account id {%d} ", dto.getExpenseCategory(), accountId))
         );
-        oldLimit.setDateTo(OffsetDateTime.now(dto.getZone()).minusSeconds(1));
+        oldLimit.setDateTo(OffsetDateTime.now(zoneOffset).minusSeconds(1));
         repository.save(oldLimit);
 
-        Limit entity = mapper.toEntity(dto, accountId);
+        Limit entity = mapper.toEntity(dto, accountId, zoneOffset);
         Limit limit = repository.saveAndFlush(entity);
         return mapper.toDto(limit);
     }

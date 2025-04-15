@@ -65,13 +65,12 @@ class LimitMapperTest {
     @Test
     void toEntity() {
         LimitCreateDto given = LimitCreateDto.builder()
-                                             .zone(ZoneOffset.ofHours(3))
                                              .sum(BigDecimal.valueOf(2000))
                                              .currency("USD")
                                              .expenseCategory("product")
                                              .build();
 
-        Limit actualResult = mapper.toEntity(given, 123L);
+        Limit actualResult = mapper.toEntity(given, 123L, ZoneOffset.ofHours(3));
 
         assertNotNull(actualResult.getAccountFrom());
         assertEquals(ZoneOffset.ofHours(3), actualResult.getDateFrom().getOffset());
