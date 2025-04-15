@@ -11,7 +11,12 @@ import java.util.Optional;
 
 public interface LimitRepository extends JpaRepository<Limit, Long> {
 
-    @Query("SELECT l FROM Limit l WHERE l.accountFrom = :account AND l.expenseCategory.name = :category")
+    @Query("""
+            SELECT l
+            FROM Limit l
+            WHERE l.accountFrom = :account
+            AND l.expenseCategory.name = :category
+            AND l.dateTo IS NULL""")
     Optional<Limit> findLimitByCategory(@Param("account") Long accountFrom,
                                         @Param("category") String expenseCategory);
 
