@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,11 +44,6 @@ public class LimitServiceImpl implements LimitService {
     @Transactional
     @Override
     public LimitOutDto add(Long accountId, LimitCreateDto dto) {
-        Optional<Limit> optLimit = repository.findLimitByCategory(accountId, dto.getExpenseCategory());
-        optLimit.ifPresent(l -> {
-            l.setDateTo(OffsetDateTime.now(dto.getZone()).minusSeconds(1));
-            repository.save(l);
-        });
         Limit entity = mapper.toEntity(dto, accountId);
         Limit limit = repository.saveAndFlush(entity);
         return mapper.toDto(limit);
