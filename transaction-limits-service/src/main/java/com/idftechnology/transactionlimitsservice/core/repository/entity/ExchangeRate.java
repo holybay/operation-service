@@ -26,7 +26,7 @@ import java.util.Currency;
 @Table(name = "exchange_rates")
 public class ExchangeRate extends BaseEntity {
 
-    @Column(name = "date")
+    @Column(name = "currency_date")
     private LocalDate date;
 
     @Column(name = "currency_from")
