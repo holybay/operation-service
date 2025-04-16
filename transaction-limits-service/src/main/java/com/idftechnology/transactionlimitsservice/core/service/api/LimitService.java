@@ -2,6 +2,8 @@ package com.idftechnology.transactionlimitsservice.core.service.api;
 
 import com.idftechnology.transactionlimitsservice.api.dto.LimitCreateDto;
 import com.idftechnology.transactionlimitsservice.api.dto.LimitOutDto;
+import com.idftechnology.transactionlimitsservice.core.platform.validation.api.ExpenseCategoryValid;
+import com.idftechnology.transactionlimitsservice.core.repository.entity.Limit;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +21,5 @@ public interface LimitService {
 
     List<LimitOutDto> getAll(Long accountId, Pageable pageable);
 
+    Limit getByAccountIdAndExpenseCategory(@NotNull Long accountFrom, @ExpenseCategoryValid String expenseCategory);
 }

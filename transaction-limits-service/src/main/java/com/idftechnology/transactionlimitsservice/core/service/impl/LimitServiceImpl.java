@@ -68,4 +68,13 @@ public class LimitServiceImpl implements LimitService {
                          .map(mapper::toDto)
                          .toList();
     }
+
+    @Override
+    public Limit getByAccountIdAndExpenseCategory(Long accountFrom, String expenseCategory) {
+        return repository.findLimitByCategory(accountFrom, expenseCategory)
+                         .orElseThrow(() -> new LimitNotFoundException(
+                                 String.format("No found limit {%s} for account id {%d} ", expenseCategory,
+                                               accountFrom))
+                         );
+    }
 }
