@@ -37,5 +37,16 @@ logging:
 app:
   property:
     limitsByDefault:
-      product: 1000
-      service: 1000
+      product: '1000'
+      service: '1000'
+
+clients:
+  currency:
+    twelve-data:
+      url: 'https://api.twelvedata.com'
+      property:
+        api-key: 'ff397938127745699ebc085d8ad580cc'
+        interval: '1day'
+        output-size: '1'
+        previous-close: 'true'
+
