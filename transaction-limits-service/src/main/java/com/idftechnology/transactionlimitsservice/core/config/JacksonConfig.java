@@ -26,9 +26,9 @@ public class JacksonConfig {
             SimpleModule module = new SimpleModule();
 
             module.addSerializer(OffsetDateTime.class,
-                    new CustomOffsetDateTimeSerializer(OFFSET_DATE_TIME_FORMATTER));
+                                 new CustomOffsetDateTimeSerializer(OFFSET_DATE_TIME_FORMATTER));
             module.addDeserializer(OffsetDateTime.class,
-                    new CustomOffsetDateTimeDeserializer(OFFSET_DATE_TIME_FORMATTER));
+                                   new CustomOffsetDateTimeDeserializer(OFFSET_DATE_TIME_FORMATTER));
             module.addDeserializer(ZoneOffset.class, new CustomZoneOffsetDeserializer());
 
             builder.modules(module);
