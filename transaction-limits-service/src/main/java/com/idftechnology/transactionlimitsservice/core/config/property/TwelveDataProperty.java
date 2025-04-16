@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Data
-@ConfigurationProperties(prefix = "clients.currency.")
+@ConfigurationProperties(prefix = "clients.currency.twelve-data.property")
 @Validated
 public class TwelveDataProperty {
 
