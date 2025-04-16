@@ -30,7 +30,7 @@ public class CurrencyResponseDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    private static class Meta {
+    public static class Meta {
 
         @NotBlank
         private String symbol;
@@ -40,7 +40,7 @@ public class CurrencyResponseDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    private static class CurrencyRate {
+    public static class CurrencyRate {
 
         @JsonProperty("datetime")
         @JsonDeserialize(using = CustomTwelveDataLocalDateDeserializer.class)
