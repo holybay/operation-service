@@ -1,5 +1,6 @@
 package com.idftechnology.transactionlimitsservice.api.controller.advice;
 
+import com.idftechnology.transactionlimitsservice.core.platform.exception.InvalidCurrencyResponseException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -76,5 +77,11 @@ public class GlobalHandler {
         return BAD_REQUEST_MESSAGE;
     }
 
+    @ExceptionHandler
+    public String handleInvalidCurrencyResponseException(InvalidCurrencyResponseException ex) {
+        List<String> errorMessages = ex.getErrorMessages();
+        log.error("Invalid client currency response: {}", errorMessages);
+        return BAD_REQUEST_MESSAGE;
+    }
 }
 
