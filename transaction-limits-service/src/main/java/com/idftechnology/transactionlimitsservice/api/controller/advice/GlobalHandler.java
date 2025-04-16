@@ -43,6 +43,13 @@ public class GlobalHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handle(IllegalStateException e) {
+        log.error(e.getMessage(), e);
+        return BAD_REQUEST_MESSAGE;
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public List<String> handle(MethodArgumentNotValidException e) {
         log.error("Invalid user input: {}", e.getMessage());
         return e.getBindingResult()
@@ -50,8 +57,6 @@ public class GlobalHandler {
                 .stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .toList();
-
-
     }
 
     @ExceptionHandler
