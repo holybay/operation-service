@@ -37,6 +37,9 @@ public class Transaction extends BaseEntity {
     @Column(name = "date_time")
     private OffsetDateTime dateTime;
 
+    @Column(name = "date_time_zone")
+    private String zone;
+
     @Column(name = "sum", precision = 18, scale = 2)
     private BigDecimal sum;
 
@@ -46,5 +49,8 @@ public class Transaction extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private ExpenseCategory expenseCategory;
+
+    @Column(name = "limit_exceeded")
+    private boolean limitExceeded;
 
 }
