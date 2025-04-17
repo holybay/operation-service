@@ -5,6 +5,8 @@ import com.idftechnology.transactionlimitsservice.api.dto.TransactionOutDto;
 import com.idftechnology.transactionlimitsservice.core.platform.util.ApplicationConstant;
 import com.idftechnology.transactionlimitsservice.core.platform.validation.api.ExpenseCategoryValid;
 import com.idftechnology.transactionlimitsservice.core.service.api.TransactionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +30,19 @@ import java.util.List;
 @RestController
 @RequestMapping("/transactions")
 @Validated
+@Tag(name = "Transactions", description = "Работа с транзакциями")
 public class TransactionController {
 
     private final TransactionService transactionService;
 
+    @Operation(summary = "Создать новую транзакцию", description = "Создает новую транзакцию с категорией расходов")
     @PostMapping("/add")
     public ResponseEntity<TransactionOutDto> create(@RequestBody @Valid TransactionCreateDto createDto) {
         TransactionOutDto created = transactionService.create(createDto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Превышенные транзакции", description = "Получает транзакции, превысившие лимит по категории расходов")
     @GetMapping("/account/{accountId}/exceeded")
     public ResponseEntity<List<TransactionOutDto>> getExceeded(@PathVariable Long accountId,
                                                                @RequestParam("expense_category") @ExpenseCategoryValid

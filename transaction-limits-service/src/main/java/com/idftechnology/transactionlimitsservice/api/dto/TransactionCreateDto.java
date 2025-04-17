@@ -1,8 +1,10 @@
 package com.idftechnology.transactionlimitsservice.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.idftechnology.transactionlimitsservice.core.platform.validation.api.CurrencyValid;
 import com.idftechnology.transactionlimitsservice.core.platform.validation.api.ExpenseCategoryValid;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,6 +40,8 @@ public class TransactionCreateDto {
     @ExpenseCategoryValid
     private String expenseCategory;
 
+    @Schema(example = "2025-04-17 08:22:22Z", description = "Дата создания транзакции")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ssX", timezone = "UTC")
     @JsonProperty("datetime")
     @FutureOrPresent
     private OffsetDateTime dateTime;

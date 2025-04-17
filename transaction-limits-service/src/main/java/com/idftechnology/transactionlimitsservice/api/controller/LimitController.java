@@ -4,6 +4,8 @@ import com.idftechnology.transactionlimitsservice.api.dto.LimitCreateDto;
 import com.idftechnology.transactionlimitsservice.api.dto.LimitOutDto;
 import com.idftechnology.transactionlimitsservice.core.platform.util.ApplicationConstant;
 import com.idftechnology.transactionlimitsservice.core.service.api.LimitFacade;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +28,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/account/{accountId}/limits")
 @Validated
+@Tag(name = "Limits", description = "Операции по лимитам аккаунта")
 public class LimitController {
 
     private final LimitFacade limitFacade;
 
+    @Operation(summary = "Создать новый лимит", description = "Создаёт лимит на расходы по заданному аккаунту")
     @PostMapping
     public ResponseEntity<LimitOutDto> add(@PathVariable Long accountId,
                                            @RequestBody @Valid LimitCreateDto createDto,
@@ -39,6 +43,7 @@ public class LimitController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Получить все лимиты", description = "Возвращает список лимитов по аккаунту с пагинацией")
     @GetMapping
     public ResponseEntity<List<LimitOutDto>> getAll(@PathVariable Long accountId,
                                                     Pageable pageable,
