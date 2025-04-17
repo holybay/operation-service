@@ -1,3 +1,42 @@
 databaseChangeLog:
   - logicalFilePath: db/changelog/db.changelog-master.yml
 
+  - include:
+      file: changeset/db.changelog-20250413_001-create-expense_categories-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250413_002-create-limits-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250413_003-create-transactions-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250413_004-create-exchange-rates-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250413_005-add-base-expense-categories.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250414_006-account-records.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250415_007-rename-column-exchange-rates-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250415_008-add-column-transaction-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250417_009-add-column-transaction-table.sql
+      relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250417_010-alter-column-type-exchange-rates-table.sql
+      relativeToChangelogFile: true
