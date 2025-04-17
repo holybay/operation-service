@@ -12,9 +12,9 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long
 
     @Query("""
             SELECT er FROM ExchangeRate er
-            "WHERE er.from.currencyCode IN :fromList
-            "AND er.to.currencyCode IN :toList
-            "AND er.date IN :dates""")
+            WHERE er.from IN :fromList
+            AND er.to IN :toList
+            AND er.date IN :dates""")
     List<ExchangeRate> findRatesByPairsAndDates(@Param("fromList") Iterable<String> fromList,
                                                 @Param("toList") Iterable<String> toList,
                                                 @Param("dates") Iterable<LocalDate> dates);

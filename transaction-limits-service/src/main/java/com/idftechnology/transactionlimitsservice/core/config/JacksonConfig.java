@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 public class JacksonConfig {
 
     public static final DateTimeFormatter OFFSET_DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssX");
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
