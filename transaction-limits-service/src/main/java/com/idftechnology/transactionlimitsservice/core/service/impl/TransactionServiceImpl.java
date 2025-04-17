@@ -14,6 +14,7 @@ import com.idftechnology.transactionlimitsservice.core.service.api.TransactionSe
 import com.idftechnology.transactionlimitsservice.core.service.dto.CurrencyPair;
 import com.idftechnology.transactionlimitsservice.core.service.dto.ExchangeRateResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
@@ -88,6 +90,21 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction entity = mapper.toEntity(dto, limitExceeded);
         repository.saveAndFlush(entity);
         return mapper.toDto(entity, limitToCompare);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<TransactionOutDto> getAll(Long accountId, String expenseCategory, ZoneOffset zone, Pageable pageable) {
+        return repository.findAllByAccountFrom(accountId, expenseCategory,
+                                               dateTimeUtil.convertToMonthStart(OffsetDateTime.now(zone)),
+                                               dateTimeUtil.convertToMonthEnd(OffsetDateTime.now(zone)), pageable
+                         ).stream()
+                         .map(t -> {
+                             Limit limit = limitService.getByAccountIdAndExpenseCategory(accountId,
+                                                                                         t.getExpenseCategory().getName());
+                             return mapper.toDto(t, limit);
+                         })
+                         .toList();
     }
 
     private boolean isUsd(String currencyToCheck) {
