@@ -36,3 +36,7 @@ databaseChangeLog:
   - include:
       file: changeset/db.changelog-20250417_009-add-column-transaction-table.sql
       relativeToChangelogFile: true
+
+  - include:
+      file: changeset/db.changelog-20250417_010-alter-column-type-exchange-rates-table.sql
+      relativeToChangelogFile: true
