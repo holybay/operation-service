@@ -73,7 +73,7 @@ class TransactionServiceImplTest {
     private TransactionServiceImpl transactionService;
 
     @Captor
-    private ArgumentCaptor<Transaction> transactionCaptor;
+    private ArgumentCaptor<Boolean> limitExceededCaptor;
 
     private Long accountId;
 
@@ -166,12 +166,15 @@ class TransactionServiceImplTest {
         verify(dateTimeUtil).convertToMonthEnd(any(OffsetDateTime.class));
         verify(exchangeRateFacade).getRatesByPairForDates(any());
         verify(limitService).getByAccountIdAndExpenseCategory(any(), any());
-        verify(mapper).toEntity(eq(createDto), anyBoolean());
-        verify(repository).saveAndFlush(transactionCaptor.capture());
-        verify(mapper).toDto(any(), any());
+        verify(mapper).toEntity(eq(createDto), limitExceededCaptor.capture());
+        verify(repository).saveAndFlush(any(Transaction.class));
+        verify(mapper).toDto(any(Transaction.class), any(Limit.class));
 
         assertEquals(expectedOutDto, actualResult);
-        assertTrue(transactionCaptor.getValue().isLimitExceeded());
+
+        boolean actualLimitExceededFlag = limitExceededCaptor.getValue();
+        assertEquals(savedEntity.isLimitExceeded(), actualLimitExceededFlag);
+        assertTrue(actualLimitExceededFlag);
     }
 
     @Test
@@ -236,12 +239,15 @@ class TransactionServiceImplTest {
         verify(dateTimeUtil).convertToMonthEnd(any(OffsetDateTime.class));
         verify(exchangeRateFacade).getRatesByPairForDates(any());
         verify(limitService).getByAccountIdAndExpenseCategory(any(), any());
-        verify(mapper).toEntity(eq(createDto), anyBoolean());
-        verify(repository).saveAndFlush(transactionCaptor.capture());
-        verify(mapper).toDto(any(), any());
+        verify(mapper).toEntity(eq(createDto), limitExceededCaptor.capture());
+        verify(repository).saveAndFlush(any(Transaction.class));
+        verify(mapper).toDto(any(Transaction.class), any(Limit.class));
 
         assertEquals(expectedOutDto, actualResult);
-        assertFalse(transactionCaptor.getValue().isLimitExceeded());
+
+        boolean actualLimitExceededFlag = limitExceededCaptor.getValue();
+        assertEquals(savedEntity.isLimitExceeded(), actualLimitExceededFlag);
+        assertFalse(actualLimitExceededFlag);
     }
 
     private Limit generateLimitEntity(LocalDate date, BigDecimal sum) {
