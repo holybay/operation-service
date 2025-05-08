@@ -20,6 +20,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -28,7 +29,6 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Currency;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -57,7 +57,7 @@ class TransactionServiceImplTest {
     @Mock
     private LimitService limitService;
 
-    @Mock
+    @Spy
     private DateTimeUtil dateTimeUtil;
 
     @Mock
@@ -93,11 +93,6 @@ class TransactionServiceImplTest {
                                   .build();
 
         transactionDate = LocalDate.of(2025, 1, 15);
-        when(dateTimeUtil.convertToMonthStart(any())).
-                thenReturn(OffsetDateTime.of(LocalDate.of(2025, 1, 1), LocalTime.MIN, zone));
-
-        when(dateTimeUtil.convertToMonthEnd(any()))
-                .thenReturn(OffsetDateTime.of(LocalDate.of(2025, 1, 1), LocalTime.MAX, zone));
 
         doNothing().when(limitInitService).checkAndInit(anyLong(), any());
     }
@@ -120,43 +115,42 @@ class TransactionServiceImplTest {
                                                false)
                 ).toList();
 
-        Map<CurrencyPair, List<LocalDate>> allDatesByPair = new HashMap<>();
         CurrencyPair newPair = CurrencyPair.builder()
                                            .from("USD")
                                            .to(createDto.getCurrency())
                                            .build();
-        allDatesByPair.put(newPair, List.of(createDto.getDateTime().toLocalDate()));
 
-        when(exchangeRateFacade.getRatesByPairForDates(allDatesByPair))
-                .thenReturn(List.of(ExchangeRateResponse.builder()
-                                                        .pair(newPair)
-                                                        .rates(Map.of(createDto.getDateTime().toLocalDate(),
-                                                                      usdToRubRate))
-                                                        .build()
-                ));
-
-        when(repository.findAllByLimitBetween(eq(accountId), eq(category.getName()), any(), any()))
-                .thenReturn(existingTransactions);
+        ExchangeRateResponse exchangeRateResponse = ExchangeRateResponse.builder()
+                                                                        .pair(newPair)
+                                                                        .rates(Map.of(
+                                                                                createDto.getDateTime().toLocalDate(),
+                                                                                usdToRubRate))
+                                                                        .build();
 
         Limit currentLimit = generateLimitEntity(LocalDate.of(2025, 1, 1),
                                                  BigDecimal.valueOf(1000));
-
-        when(limitService.getByAccountIdAndExpenseCategory(accountId, category.getName()))
-                .thenReturn(currentLimit);
 
         Transaction savedEntity = getTransactionEntity(createDto.getDateTime().toLocalDate(),
                                                        createDto.getSum(),
                                                        createDto.getCurrency(),
                                                        true);
 
+        TransactionOutDto expectedOutDto = getTransactionOutDto(savedEntity, currentLimit);
+
+        when(exchangeRateFacade.getRatesByPairForDates(any()))
+                .thenReturn(List.of(exchangeRateResponse));
+
+        when(repository.findAllByLimitBetween(eq(accountId), eq(category.getName()), any(), any()))
+                .thenReturn(existingTransactions);
+
+        when(limitService.getByAccountIdAndExpenseCategory(eq(accountId), eq(category.getName())))
+                .thenReturn(currentLimit);
+
         when(mapper.toEntity(any(TransactionCreateDto.class), anyBoolean()))
                 .thenReturn(savedEntity);
 
-        TransactionOutDto expectedOutDto = getTransactionOutDto(savedEntity, currentLimit);
-
-        when(mapper.toDto(savedEntity, currentLimit))
+        when(mapper.toDto(any(Transaction.class), any(Limit.class)))
                 .thenReturn(expectedOutDto);
-
 
         TransactionOutDto actualResult = transactionService.create(createDto);
 
@@ -194,43 +188,42 @@ class TransactionServiceImplTest {
                                                false)
                 ).toList();
 
-        Map<CurrencyPair, List<LocalDate>> allDatesByPair = new HashMap<>();
         CurrencyPair newPair = CurrencyPair.builder()
                                            .from("USD")
                                            .to(createDto.getCurrency())
                                            .build();
-        allDatesByPair.put(newPair, List.of(createDto.getDateTime().toLocalDate()));
 
-        when(exchangeRateFacade.getRatesByPairForDates(allDatesByPair))
-                .thenReturn(List.of(ExchangeRateResponse.builder()
-                                                        .pair(newPair)
-                                                        .rates(Map.of(createDto.getDateTime().toLocalDate(),
-                                                                      usdToKztRate))
-                                                        .build()
-                ));
-
-        when(repository.findAllByLimitBetween(eq(accountId), eq(category.getName()), any(), any()))
-                .thenReturn(existingTransactions);
-
-        Limit currentLimit = generateLimitEntity(LocalDate.of(2025, 1, 1),
-                                                 BigDecimal.valueOf(1000));
-
-        when(limitService.getByAccountIdAndExpenseCategory(accountId, category.getName()))
-                .thenReturn(currentLimit);
+        ExchangeRateResponse exchangeRateResponse = ExchangeRateResponse.builder()
+                                                                        .pair(newPair)
+                                                                        .rates(Map.of(
+                                                                                createDto.getDateTime().toLocalDate(),
+                                                                                usdToKztRate))
+                                                                        .build();
 
         Transaction savedEntity = getTransactionEntity(createDto.getDateTime().toLocalDate(),
                                                        createDto.getSum(),
                                                        createDto.getCurrency(),
                                                        false);
 
-        when(mapper.toEntity(any(TransactionCreateDto.class), anyBoolean()))
-                .thenReturn(savedEntity);
+        Limit currentLimit = generateLimitEntity(LocalDate.of(2025, 1, 1),
+                                                 BigDecimal.valueOf(1000));
 
         TransactionOutDto expectedOutDto = getTransactionOutDto(savedEntity, currentLimit);
 
-        when(mapper.toDto(savedEntity, currentLimit))
-                .thenReturn(expectedOutDto);
+        when(exchangeRateFacade.getRatesByPairForDates(any()))
+                .thenReturn(List.of(exchangeRateResponse));
 
+        when(repository.findAllByLimitBetween(eq(accountId), eq(category.getName()), any(), any()))
+                .thenReturn(existingTransactions);
+
+        when(limitService.getByAccountIdAndExpenseCategory(eq(accountId), eq(category.getName())))
+                .thenReturn(currentLimit);
+
+        when(mapper.toEntity(any(TransactionCreateDto.class), anyBoolean()))
+                .thenReturn(savedEntity);
+
+        when(mapper.toDto(any(Transaction.class), any(Limit.class)))
+                .thenReturn(expectedOutDto);
 
         TransactionOutDto actualResult = transactionService.create(createDto);
 
